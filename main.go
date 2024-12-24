@@ -1,25 +1,36 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"log"
+	"math"
+	"math/big"
+
+	_ "github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-//TIP To run your code, right-click the code and select <b>Run</b>. Alternatively, click
-// the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.
-
 func main() {
-	//TIP Press <shortcut actionId="ShowIntentionActions"/> when your caret is at the underlined or highlighted text
-	// to see how GoLand suggests fixing it.
-	s := "gopher"
-	fmt.Println("Hello and welcome, %s!", s)
-
-	for i := 1; i <= 5; i++ {
-		//TIP You can try debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-		// for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>. To start your debugging session,
-		// right-click your code in the editor and select the <b>Debug</b> option.
-		fmt.Println("i =", 100/i)
+	client, err := ethclient.Dial("https://mainnet.infura.io/v3/" + PROJECT_ID)
+	if err != nil {
+		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
 	}
-}
 
-//TIP See GoLand help at <a href="https://www.jetbrains.com/help/go/">jetbrains.com/help/go/</a>.
-// Also, you can try interactive lessons for GoLand by selecting 'Help | Learn IDE Features' from the main menu.
+	blockNumber, err := client.BlockNumber(context.Background())
+	if err != nil {
+		log.Fatalf("Failed to get the latest block number: %v", err)
+	}
+	fmt.Printf("Latest block number: %d\n", blockNumber)
+
+	address := common.HexToAddress(ADDRESS)
+	balance, err := client.BalanceAt(context.Background(), address, nil)
+	if err != nil {
+		log.Fatalf("Failed to get the balance: %v", err)
+	}
+	fmt.Printf("Balance: %s\n", balance.String())
+
+	etherValue := new(big.Float).Quo(new(big.Float).SetInt(balance), big.NewFloat(math.Pow10(18)))
+	fmt.Printf("Balance in Ether: %f\n", etherValue)
+}
