@@ -1,8 +1,8 @@
 const Web3 = require('web3');
-const web3 = new Web3('https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID');
+const web3 = new Web3('https://mainnet.infura.io/v3/');
 
-const contractAddress = '0xYourContractAddress';
-const abi = [/* ABI array here */];
+const contractAddress = '';
+const abi = [];
 
 const contract = new web3.eth.Contract(abi, contractAddress);
 

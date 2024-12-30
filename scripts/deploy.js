@@ -2,10 +2,10 @@ const Web3 = require('web3');
 const fs = require('fs');
 const solc = require('solc');
 
-const web3 = new Web3('https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID');
+const web3 = new Web3('https://mainnet.infura.io/v3/');
 
 const source = fs.readFileSync('contracts/MyContract.sol', 'utf8');
-const compiled = solc.compile(source, 1).contracts[':MyContract'];
+const compiled = solc.compile(source, 1).contracts[':contract'];
 const abi = JSON.parse(compiled.interface);
 const bytecode = compiled.bytecode;
 
